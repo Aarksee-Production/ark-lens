@@ -67,25 +67,30 @@ export class TocManager {
 
     const minLevel = Math.min(...this.entries.map((e) => e.level));
 
-    sidebar.innerHTML = `
-      <div class="toc-title">Contents</div>
-      <nav class="toc-nav">
-        ${this.entries
-          .map(
-            (entry) => `
-          <a class="toc-entry toc-level-${entry.level - minLevel}"
-             href="#${entry.id}"
-             data-toc-id="${entry.id}"
-             title="${escapeHtml(entry.text)}">
-            ${escapeHtml(entry.text)}
-          </a>
-        `
-          )
-          .join('')}
-      </nav>
-    `;
+    sidebar.textContent = '';
 
-    sidebar.querySelectorAll('.toc-entry').forEach((link) => {
+    const title = document.createElement('div');
+    title.className = 'toc-title';
+    title.textContent = 'Contents';
+    sidebar.appendChild(title);
+
+    const nav = document.createElement('nav');
+    nav.className = 'toc-nav';
+
+    for (const entry of this.entries) {
+      const safeId = sanitizeId(entry.id);
+      const a = document.createElement('a');
+      a.className = `toc-entry toc-level-${entry.level - minLevel}`;
+      a.href = `#${safeId}`;
+      a.dataset.tocId = safeId;
+      a.title = entry.text;
+      a.textContent = entry.text;
+      nav.appendChild(a);
+    }
+
+    sidebar.appendChild(nav);
+
+    nav.querySelectorAll('.toc-entry').forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetId = (link as HTMLElement).dataset.tocId!;
@@ -125,8 +130,7 @@ export class TocManager {
   }
 }
 
-function escapeHtml(text: string): string {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+/** Strip characters unsafe for use as an HTML id / attribute value. */
+function sanitizeId(id: string): string {
+  return id.replace(/[^A-Za-z0-9._:-]/g, '');
 }

@@ -179,10 +179,30 @@ export class ViewerProvider implements vscode.Disposable {
     'theme', 'fontSize', 'fontFamily', 'contentWidth', 'tocVisible', 'maxTabs',
   ]);
 
+  private static validateSettingValue(key: string, value: unknown): boolean {
+    switch (key) {
+      case 'theme':
+        return typeof value === 'string' && ['auto', 'light', 'dark'].includes(value);
+      case 'fontSize':
+        return typeof value === 'number' && Number.isInteger(value) && value >= 12 && value <= 24;
+      case 'fontFamily':
+        return typeof value === 'string' && ['system', 'serif', 'mono'].includes(value);
+      case 'contentWidth':
+        return typeof value === 'string' && ['narrow', 'medium', 'wide'].includes(value);
+      case 'tocVisible':
+        return typeof value === 'boolean';
+      case 'maxTabs':
+        return typeof value === 'number' && Number.isInteger(value) && value >= 1 && value <= 50;
+      default:
+        return false;
+    }
+  }
+
   private handleMessage(message: any) {
     switch (message.type) {
       case 'settingChanged':
         if (!ViewerProvider.ALLOWED_SETTINGS.has(message.key)) return;
+        if (!ViewerProvider.validateSettingValue(message.key, message.value)) return;
         vscode.workspace
           .getConfiguration('arkLens')
           .update(message.key, message.value, vscode.ConfigurationTarget.Global);

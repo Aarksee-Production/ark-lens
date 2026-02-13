@@ -1,5 +1,6 @@
 """Generate minimal geometric icon for Ark Lens."""
 from PIL import Image, ImageDraw
+from pathlib import Path
 import math
 
 SIZE = 256
@@ -78,13 +79,16 @@ draw.ellipse(
     fill=highlight_color,
 )
 
-# Save
-out_path = "D:/My-Applications/ark-lens/media/icon.png"
+# Save relative to project root
+project_root = Path(__file__).resolve().parent.parent
+out_path = project_root / "media" / "icon.png"
+out_128 = project_root / "media" / "icon-128.png"
+
 img.save(out_path, "PNG")
 
 # Also save a 128x128 version
 img_128 = img.resize((128, 128), Image.LANCZOS)
-img_128.save(out_path.replace('.png', '-128.png'), "PNG")
+img_128.save(out_128, "PNG")
 
 print(f"Icon saved: {out_path} ({SIZE}x{SIZE})")
-print(f"Icon saved: {out_path.replace('.png', '-128.png')} (128x128)")
+print(f"Icon saved: {out_128} (128x128)")

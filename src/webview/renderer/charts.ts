@@ -26,6 +26,11 @@ export function renderChartBlocks(): void {
     }
 
     try {
+      const MAX_CONFIG_LENGTH = 50_000;
+      if (rawConfig.length > MAX_CONFIG_LENGTH) {
+        throw new Error(`Chart config too large (${rawConfig.length} chars, max ${MAX_CONFIG_LENGTH})`);
+      }
+
       const raw = JSON.parse(rawConfig);
 
       if (!raw.type || !raw.data) {
@@ -34,6 +39,11 @@ export function renderChartBlocks(): void {
 
       if (!ALLOWED_CHART_TYPES.has(raw.type)) {
         throw new Error(`Unsupported chart type: ${raw.type}`);
+      }
+
+      const ALLOWED_INDEX_AXIS = new Set(['x', 'y']);
+      if (raw.options?.indexAxis && !ALLOWED_INDEX_AXIS.has(raw.options.indexAxis)) {
+        throw new Error(`Unsupported indexAxis: ${raw.options.indexAxis}`);
       }
 
       // Destroy existing
