@@ -6,11 +6,29 @@
   "publisher": "aarksee",
   "license": "MIT",
   "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Aarksee-Production/ark-lens"
+  },
+  "homepage": "https://github.com/Aarksee-Production/ark-lens#readme",
+  "bugs": {
+    "url": "https://github.com/Aarksee-Production/ark-lens/issues"
+  },
+  "keywords": [
+    "markdown",
+    "preview",
+    "html",
+    "mermaid",
+    "chart",
+    "offline",
+    "secure",
+    "viewer"
+  ],
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Visualization"
   ],
   "activationEvents": [
     "onLanguage:markdown",
