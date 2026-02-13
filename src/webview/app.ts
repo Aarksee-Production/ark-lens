@@ -45,7 +45,7 @@ function extractBody(html: string): string {
 
 function resolveLocalPaths(html: string, base: string): string {
   return html.replace(
-    /(src|href)="(?!https?:\/\/|data:|vscode-resource:|vscode-webview-resource:)([^"#][^"]*?)"/g,
+    /(src|href)="(?!https?:\/\/|data:|vscode-resource:|vscode-webview-resource:|\/|\.\.\/|\.\.\\)([^"#][^"]*?)"/g,
     (_match, attr, relativePath) => {
       const resolved = base.endsWith('/') ? base + relativePath : base + '/' + relativePath;
       return `${attr}="${resolved}"`;

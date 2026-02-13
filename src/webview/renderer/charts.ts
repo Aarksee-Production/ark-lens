@@ -4,6 +4,10 @@ Chart.register(...registerables);
 
 const chartInstances = new Map<string, Chart>();
 
+const ALLOWED_CHART_TYPES = new Set([
+  'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'bubble', 'scatter',
+]);
+
 export function renderChartBlocks(): void {
   const blocks = document.querySelectorAll('.ark-chart:not(.ark-chart-rendered):not(.ark-chart-error)');
   if (blocks.length === 0) return;
@@ -22,10 +26,14 @@ export function renderChartBlocks(): void {
     }
 
     try {
-      const config = JSON.parse(rawConfig);
+      const raw = JSON.parse(rawConfig);
 
-      if (!config.type || !config.data) {
+      if (!raw.type || !raw.data) {
         throw new Error('Chart config must have "type" and "data" properties');
+      }
+
+      if (!ALLOWED_CHART_TYPES.has(raw.type)) {
+        throw new Error(`Unsupported chart type: ${raw.type}`);
       }
 
       // Destroy existing
@@ -33,22 +41,37 @@ export function renderChartBlocks(): void {
         chartInstances.get(id)!.destroy();
       }
 
-      block.innerHTML = `<canvas id="${id}" style="max-height:400px;"></canvas>`;
-      const canvas = document.getElementById(id) as HTMLCanvasElement;
+      // Safe DOM creation (no innerHTML with user-derived id)
+      const canvas = document.createElement('canvas');
+      canvas.id = id;
+      canvas.style.maxHeight = '400px';
+      block.textContent = '';
+      block.appendChild(canvas);
 
-      // Theme-aware defaults
-      config.options = config.options || {};
-      config.options.responsive = true;
-      config.options.maintainAspectRatio = true;
-      config.options.animation = { duration: 300 };
+      // Build safe config -- whitelist allowed options only
+      const safeConfig = {
+        type: raw.type,
+        data: raw.data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          animation: { duration: 300 },
+          color: undefined as string | undefined,
+          scales: raw.options?.scales || {},
+          plugins: {
+            legend: raw.options?.plugins?.legend || {},
+            title: raw.options?.plugins?.title || {},
+          },
+          indexAxis: raw.options?.indexAxis,
+        },
+      };
 
       if (isDark) {
-        config.options.color = '#c9d1d9';
-        config.options.scales = config.options.scales || {};
-        applyDarkScales(config.options.scales);
+        safeConfig.options.color = '#c9d1d9';
+        applyDarkScales(safeConfig.options.scales);
       }
 
-      const chart = new Chart(canvas, config);
+      const chart = new Chart(canvas, safeConfig as any);
       chartInstances.set(id, chart);
       block.classList.add('ark-chart-rendered');
     } catch (err: any) {
