@@ -45,9 +45,8 @@ const markdownPurifyConfig: PurifyConfig = {
     'a',
     'blockquote', 'details', 'summary',
     'input',
-    'canvas',
     'svg', 'path', 'circle', 'rect', 'line', 'polyline', 'polygon', 'text', 'g', 'defs',
-    'marker', 'use', 'clipPath', 'foreignObject', 'desc', 'title', 'tspan',
+    'marker', 'use', 'clipPath', 'desc', 'title', 'tspan',
     'header', 'footer', 'nav', 'main', 'aside', 'abbr', 'address', 'cite', 'time',
   ],
   ALLOWED_ATTR: [
@@ -65,14 +64,14 @@ const markdownPurifyConfig: PurifyConfig = {
     'marker-end', 'marker-start', 'clip-path', 'mask',
     'role', 'aria-label', 'aria-hidden',
   ],
-  FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'button', 'select', 'textarea', 'link', 'meta', 'style', 'base'],
+  FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'button', 'select', 'textarea', 'link', 'meta', 'style', 'base', 'foreignObject', 'canvas'],
   FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onsubmit', 'onchange', 'style'],
   ALLOW_DATA_ATTR: false,
 };
 
 const htmlPurifyConfig: PurifyConfig = {
   ...markdownPurifyConfig,
-  ALLOW_DATA_ATTR: true,
+  ALLOW_DATA_ATTR: false,
   ALLOWED_TAGS: [
     ...(markdownPurifyConfig.ALLOWED_TAGS as string[]),
     'ruby', 'rt', 'rp', 'bdi', 'bdo', 'wbr', 'map', 'area',

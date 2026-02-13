@@ -76,7 +76,11 @@
         "arkLens.theme": {
           "type": "string",
           "default": "auto",
-          "enum": ["auto", "light", "dark"],
+          "enum": [
+            "auto",
+            "light",
+            "dark"
+          ],
           "description": "Theme for the viewer (auto follows VS Code theme)"
         },
         "arkLens.fontSize": {
@@ -89,13 +93,21 @@
         "arkLens.fontFamily": {
           "type": "string",
           "default": "system",
-          "enum": ["system", "serif", "mono"],
+          "enum": [
+            "system",
+            "serif",
+            "mono"
+          ],
           "description": "Font family for content"
         },
         "arkLens.contentWidth": {
           "type": "string",
           "default": "medium",
-          "enum": ["narrow", "medium", "wide"],
+          "enum": [
+            "narrow",
+            "medium",
+            "wide"
+          ],
           "description": "Content width (narrow=600px, medium=800px, wide=full)"
         },
         "arkLens.tocVisible": {
@@ -126,7 +138,7 @@
     "@types/node": "^20.0.0",
     "@types/prismjs": "^1.26.6",
     "@types/vscode": "^1.85.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.27.3",
     "typescript": "^5.5.0"
   },
   "dependencies": {
