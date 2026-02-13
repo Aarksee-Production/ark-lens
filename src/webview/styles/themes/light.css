@@ -1,0 +1,35 @@
+body.light, body.vscode-light {
+  --ark-bg: #ffffff;
+  --ark-fg: #24292e;
+  --ark-bg-secondary: #f6f8fa;
+  --ark-border: #e1e4e8;
+  --ark-link: #0366d6;
+  --ark-link-hover: #0250a3;
+  --ark-code-bg: #f6f8fa;
+  --ark-blockquote-border: #0366d6;
+  --ark-blockquote-fg: #6a737d;
+  --ark-table-header-bg: #f6f8fa;
+  --ark-table-border: #dfe2e5;
+  --ark-mark-bg: #fff3cd;
+  --ark-error-bg: #fdeded;
+  --ark-error-fg: #5f2120;
+  --ark-error-border: #f5c6cb;
+
+  /* Syntax highlighting */
+  --code-keyword: #d73a49;
+  --code-string: #032f62;
+  --code-comment: #6a737d;
+  --code-function: #6f42c1;
+  --code-number: #005cc5;
+  --code-operator: #d73a49;
+  --code-punctuation: #24292e;
+  --code-class: #6f42c1;
+  --code-variable: #e36209;
+  --code-attr-name: #6f42c1;
+  --code-attr-value: #032f62;
+  --code-tag: #22863a;
+  --code-selector: #6f42c1;
+  --code-property: #005cc5;
+  --code-builtin: #d73a49;
+  --code-boolean: #005cc5;
+}

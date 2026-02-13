@@ -1,0 +1,35 @@
+body.dark, body.vscode-dark {
+  --ark-bg: #0d1117;
+  --ark-fg: #c9d1d9;
+  --ark-bg-secondary: #161b22;
+  --ark-border: #30363d;
+  --ark-link: #58a6ff;
+  --ark-link-hover: #79c0ff;
+  --ark-code-bg: #161b22;
+  --ark-blockquote-border: #58a6ff;
+  --ark-blockquote-fg: #8b949e;
+  --ark-table-header-bg: #161b22;
+  --ark-table-border: #30363d;
+  --ark-mark-bg: #533d00;
+  --ark-error-bg: #3d1e1e;
+  --ark-error-fg: #f8d7da;
+  --ark-error-border: #842029;
+
+  /* Syntax highlighting */
+  --code-keyword: #ff7b72;
+  --code-string: #a5d6ff;
+  --code-comment: #8b949e;
+  --code-function: #d2a8ff;
+  --code-number: #79c0ff;
+  --code-operator: #ff7b72;
+  --code-punctuation: #c9d1d9;
+  --code-class: #f0883e;
+  --code-variable: #ffa657;
+  --code-attr-name: #d2a8ff;
+  --code-attr-value: #a5d6ff;
+  --code-tag: #7ee787;
+  --code-selector: #d2a8ff;
+  --code-property: #79c0ff;
+  --code-builtin: #ff7b72;
+  --code-boolean: #79c0ff;
+}

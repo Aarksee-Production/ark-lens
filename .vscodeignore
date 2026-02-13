@@ -1,0 +1,14 @@
+.vscode/**
+src/**
+node_modules/**
+*.ts
+!dist/**/*.js
+tsconfig.json
+esbuild.config.mjs
+.gitignore
+.planning/**
+test-fixtures/**
+scripts/**
+media/icon-128.png
+media/icon.svg
+**/*.map

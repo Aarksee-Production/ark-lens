@@ -1,0 +1,59 @@
+#control-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  background: var(--ark-bg-secondary);
+  border-top: 1px solid var(--ark-border);
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+#control-bar button {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--ark-fg);
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+}
+
+#control-bar button:hover { background: var(--ark-border); }
+#control-bar button.active { border-color: var(--ark-link); color: var(--ark-link); }
+
+#control-bar select {
+  background: var(--ark-bg);
+  color: var(--ark-fg);
+  border: 1px solid var(--ark-border);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 12px;
+  height: 24px;
+  cursor: pointer;
+}
+
+#control-bar svg { flex-shrink: 0; }
+
+#font-size-display {
+  font-family: monospace;
+  min-width: 32px;
+  text-align: center;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.control-separator {
+  width: 1px;
+  height: 16px;
+  background: var(--ark-border);
+  flex-shrink: 0;
+}
+
+.width-btn { font-family: monospace; letter-spacing: -1px; }

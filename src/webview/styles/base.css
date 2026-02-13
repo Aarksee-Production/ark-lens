@@ -1,0 +1,86 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--ark-bg);
+  color: var(--ark-fg);
+}
+
+#viewer-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#content-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+#content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 32px 64px;
+  line-height: 1.7;
+  word-wrap: break-word;
+}
+
+/* Empty state */
+#empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: var(--ark-fg);
+  opacity: 0.5;
+  text-align: center;
+  gap: 8px;
+}
+
+#empty-state .empty-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#empty-state .shortcut {
+  font-size: 12px;
+  opacity: 0.7;
+  font-family: monospace;
+}
+
+/* Render errors */
+.ark-render-error {
+  background: var(--ark-error-bg, #fdeded);
+  color: var(--ark-error-fg, #5f2120);
+  border: 1px solid var(--ark-error-border, #f5c6cb);
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.85em;
+  margin: 16px 0;
+  white-space: pre-wrap;
+}
+
+/* Rich content blocks */
+.ark-mermaid, .ark-chart {
+  margin: 20px 0;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.ark-mermaid svg { max-width: 100%; height: auto; }
+.ark-chart canvas { max-width: 100%; }

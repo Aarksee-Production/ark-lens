@@ -1,0 +1,110 @@
+/* Headings */
+#content h1 { font-size: 2em; font-weight: 700; border-bottom: 1px solid var(--ark-border); padding-bottom: 0.3em; margin: 24px 0 16px; }
+#content h2 { font-size: 1.5em; font-weight: 600; border-bottom: 1px solid var(--ark-border); padding-bottom: 0.3em; margin: 24px 0 16px; }
+#content h3 { font-size: 1.25em; font-weight: 600; margin: 24px 0 16px; }
+#content h4 { font-size: 1em; font-weight: 600; margin: 16px 0 8px; }
+#content h5 { font-size: 0.875em; font-weight: 600; margin: 16px 0 8px; }
+#content h6 { font-size: 0.85em; font-weight: 600; color: var(--ark-blockquote-fg); margin: 16px 0 8px; }
+
+/* Paragraphs */
+#content p { margin: 0 0 16px; }
+
+/* Lists */
+#content ul, #content ol { margin: 0 0 16px; padding-left: 2em; }
+#content li { margin: 4px 0; }
+#content li > ul, #content li > ol { margin-bottom: 0; }
+
+/* Code */
+#content pre {
+  background: var(--ark-code-bg);
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0 0 16px;
+  border: 1px solid var(--ark-border);
+}
+
+#content code {
+  font-family: 'Cascadia Code', 'Fira Code', Consolas, 'Courier New', monospace;
+  font-size: 0.875em;
+}
+
+#content :not(pre) > code {
+  background: var(--ark-code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--ark-border);
+}
+
+/* Tables */
+#content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 16px;
+  display: block;
+  overflow-x: auto;
+}
+
+#content th, #content td {
+  border: 1px solid var(--ark-table-border);
+  padding: 8px 13px;
+  text-align: left;
+}
+
+#content th {
+  background: var(--ark-table-header-bg);
+  font-weight: 600;
+}
+
+#content tr:nth-child(even) td {
+  background: var(--ark-bg-secondary);
+}
+
+/* Blockquotes */
+#content blockquote {
+  border-left: 4px solid var(--ark-blockquote-border);
+  margin: 0 0 16px;
+  padding: 8px 16px;
+  color: var(--ark-blockquote-fg);
+}
+
+#content blockquote > p:last-child { margin-bottom: 0; }
+
+/* Links */
+#content a { color: var(--ark-link); text-decoration: none; }
+#content a:hover { color: var(--ark-link-hover); text-decoration: underline; }
+
+/* Images */
+#content img { max-width: 100%; height: auto; border-radius: 4px; margin: 8px 0; }
+
+/* Video / Audio */
+#content video, #content audio { max-width: 100%; margin: 8px 0; }
+
+/* Horizontal rule */
+#content hr { border: none; border-top: 1px solid var(--ark-border); margin: 24px 0; }
+
+/* Task lists */
+#content input[type="checkbox"] { margin-right: 8px; vertical-align: middle; }
+
+/* Details/Summary */
+#content details { margin: 0 0 16px; }
+#content summary { cursor: pointer; font-weight: 600; }
+
+/* Mark */
+#content mark { background: var(--ark-mark-bg); padding: 2px 4px; border-radius: 2px; }
+
+/* Definition lists */
+#content dl { margin: 0 0 16px; }
+#content dt { font-weight: 600; margin-top: 8px; }
+#content dd { margin-left: 2em; }
+
+/* Kbd */
+#content kbd {
+  background: var(--ark-bg-secondary);
+  border: 1px solid var(--ark-border);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 0.85em;
+  font-family: inherit;
+  box-shadow: 0 1px 0 var(--ark-border);
+}

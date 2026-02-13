@@ -1,0 +1,125 @@
+interface TocEntry {
+  id: string;
+  text: string;
+  level: number;
+}
+
+export class TocManager {
+  private entries: TocEntry[] = [];
+  private visible: boolean = true;
+  private observer: IntersectionObserver | null = null;
+  private vscode: any;
+
+  constructor(vscode: any) {
+    this.vscode = vscode;
+
+    // Listen for toggle event from controls
+    window.addEventListener('ark-toggle-toc', () => this.toggle());
+  }
+
+  setVisible(visible: boolean): void {
+    this.visible = visible;
+    const sidebar = document.getElementById('toc-sidebar');
+    if (sidebar) sidebar.classList.toggle('hidden', !this.visible);
+  }
+
+  generate(): void {
+    const headings = document.querySelectorAll('#content h1, #content h2, #content h3, #content h4, #content h5, #content h6');
+    this.entries = [];
+
+    headings.forEach((heading, index) => {
+      if (!heading.id) {
+        heading.id = `heading-${index}`;
+      }
+      this.entries.push({
+        id: heading.id,
+        text: heading.textContent || '',
+        level: parseInt(heading.tagName[1]),
+      });
+    });
+
+    this.render();
+    this.observeHeadings();
+  }
+
+  toggle(): void {
+    this.visible = !this.visible;
+    const sidebar = document.getElementById('toc-sidebar');
+    if (sidebar) sidebar.classList.toggle('hidden', !this.visible);
+    this.vscode.postMessage({ type: 'settingChanged', key: 'tocVisible', value: this.visible });
+  }
+
+  private render(): void {
+    const sidebar = document.getElementById('toc-sidebar');
+    if (!sidebar) return;
+
+    if (this.entries.length === 0) {
+      sidebar.innerHTML = '<p class="toc-empty">No headings</p>';
+      return;
+    }
+
+    const minLevel = Math.min(...this.entries.map((e) => e.level));
+
+    sidebar.innerHTML = `
+      <div class="toc-title">Contents</div>
+      <nav class="toc-nav">
+        ${this.entries
+          .map(
+            (entry) => `
+          <a class="toc-entry toc-level-${entry.level - minLevel}"
+             href="#${entry.id}"
+             data-toc-id="${entry.id}"
+             title="${escapeHtml(entry.text)}">
+            ${escapeHtml(entry.text)}
+          </a>
+        `
+          )
+          .join('')}
+      </nav>
+    `;
+
+    sidebar.querySelectorAll('.toc-entry').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = (link as HTMLElement).dataset.tocId!;
+        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  }
+
+  private observeHeadings(): void {
+    if (this.observer) this.observer.disconnect();
+
+    const contentArea = document.getElementById('content-area');
+    if (!contentArea) return;
+
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            this.highlightTocEntry(entry.target.id);
+            break;
+          }
+        }
+      },
+      { root: contentArea, rootMargin: '-10% 0px -80% 0px' }
+    );
+
+    this.entries.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) this.observer!.observe(el);
+    });
+  }
+
+  private highlightTocEntry(id: string): void {
+    document.querySelectorAll('.toc-entry').forEach((el) => {
+      el.classList.toggle('active', (el as HTMLElement).dataset.tocId === id);
+    });
+  }
+}
+
+function escapeHtml(text: string): string {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}

@@ -1,0 +1,139 @@
+{
+  "name": "ark-lens",
+  "displayName": "Ark Lens",
+  "description": "Secure offline Markdown and HTML viewer",
+  "version": "0.1.0",
+  "publisher": "aarksee",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onLanguage:html"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "arkLens.openPreview",
+        "title": "Open Preview",
+        "category": "Ark Lens"
+      },
+      {
+        "command": "arkLens.openPreviewToSide",
+        "title": "Open Preview to the Side",
+        "category": "Ark Lens"
+      },
+      {
+        "command": "arkLens.toggleTheme",
+        "title": "Toggle Theme",
+        "category": "Ark Lens"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "arkLens.openPreview",
+        "key": "ctrl+shift+l",
+        "when": "editorLangId == markdown || editorLangId == html"
+      },
+      {
+        "command": "arkLens.openPreviewToSide",
+        "key": "ctrl+k l",
+        "when": "editorLangId == markdown || editorLangId == html"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "arkLens.openPreviewToSide",
+          "when": "editorLangId == markdown || editorLangId == html",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "arkLens.openPreview",
+          "when": "editorLangId == markdown || editorLangId == html",
+          "group": "navigation@10"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "arkLens.openPreview",
+          "when": "resourceExtname == .md || resourceExtname == .markdown || resourceExtname == .html || resourceExtname == .htm",
+          "group": "navigation@10"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Ark Lens",
+      "properties": {
+        "arkLens.theme": {
+          "type": "string",
+          "default": "auto",
+          "enum": ["auto", "light", "dark"],
+          "description": "Theme for the viewer (auto follows VS Code theme)"
+        },
+        "arkLens.fontSize": {
+          "type": "number",
+          "default": 16,
+          "minimum": 12,
+          "maximum": 24,
+          "description": "Font size in pixels"
+        },
+        "arkLens.fontFamily": {
+          "type": "string",
+          "default": "system",
+          "enum": ["system", "serif", "mono"],
+          "description": "Font family for content"
+        },
+        "arkLens.contentWidth": {
+          "type": "string",
+          "default": "medium",
+          "enum": ["narrow", "medium", "wide"],
+          "description": "Content width (narrow=600px, medium=800px, wide=full)"
+        },
+        "arkLens.tocVisible": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show table of contents sidebar"
+        },
+        "arkLens.maxTabs": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Maximum number of open tabs before LRU eviction"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "build:prod": "node esbuild.config.mjs --production",
+    "watch": "node esbuild.config.mjs --watch",
+    "lint": "tsc --noEmit",
+    "package": "npm run build:prod && npx @vscode/vsce package --no-dependencies",
+    "install-local": "code --install-extension ark-lens-*.vsix"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^20.0.0",
+    "@types/prismjs": "^1.26.6",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "dompurify": "^3.3.1",
+    "markdown-it": "^14.1.1",
+    "mermaid": "^11.12.2",
+    "prismjs": "^1.30.0"
+  }
+}
