@@ -92,6 +92,8 @@ function showEmptyState() {
   const app = document.getElementById('app')!;
   emptyState.style.display = 'flex';
   app.style.display = 'none';
+  // Notify host that all tabs are closed so it can close the panel
+  vscode.postMessage({ type: 'allTabsClosed' });
 }
 
 function renderTabBar() {

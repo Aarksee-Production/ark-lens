@@ -21,12 +21,12 @@
     "commands": [
       {
         "command": "arkLens.openPreview",
-        "title": "Open Preview",
+        "title": "Open Ark Preview",
         "category": "Ark Lens"
       },
       {
         "command": "arkLens.openPreviewToSide",
-        "title": "Open Preview to the Side",
+        "title": "Open Ark Preview to the Side",
         "category": "Ark Lens"
       },
       {

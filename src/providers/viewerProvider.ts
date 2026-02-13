@@ -193,6 +193,12 @@ export class ViewerProvider implements vscode.Disposable {
           this.panel.title = `Ark Lens: ${message.fileName}`;
         }
         break;
+      case 'allTabsClosed':
+        if (this.panel) {
+          this.panel.dispose();
+          this.panel = undefined;
+        }
+        break;
       case 'ready':
         this.sendSettings();
         break;
