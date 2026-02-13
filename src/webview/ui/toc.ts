@@ -21,6 +21,7 @@ export class TocManager {
     this.visible = visible;
     const sidebar = document.getElementById('toc-sidebar');
     if (sidebar) sidebar.classList.toggle('hidden', !this.visible);
+    this.updateToggleButton();
   }
 
   generate(): void {
@@ -46,7 +47,13 @@ export class TocManager {
     this.visible = !this.visible;
     const sidebar = document.getElementById('toc-sidebar');
     if (sidebar) sidebar.classList.toggle('hidden', !this.visible);
+    this.updateToggleButton();
     this.vscode.postMessage({ type: 'settingChanged', key: 'tocVisible', value: this.visible });
+  }
+
+  private updateToggleButton(): void {
+    const btn = document.getElementById('toc-toggle');
+    if (btn) btn.classList.toggle('active', this.visible);
   }
 
   private render(): void {

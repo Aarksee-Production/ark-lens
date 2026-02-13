@@ -19,6 +19,7 @@ const controlsManager = new ControlsManager(vscode);
 const tocManager = new TocManager(vscode);
 
 let basePath = '';
+let hasOpenedFile = false;
 
 // --- Rendering ---
 async function renderContent(text: string, fileType: string): Promise<string> {
@@ -92,8 +93,10 @@ function showEmptyState() {
   const app = document.getElementById('app')!;
   emptyState.style.display = 'flex';
   app.style.display = 'none';
-  // Notify host that all tabs are closed so it can close the panel
-  vscode.postMessage({ type: 'allTabsClosed' });
+  // Only close the panel if we previously had files open (not on init)
+  if (hasOpenedFile) {
+    vscode.postMessage({ type: 'allTabsClosed' });
+  }
 }
 
 function renderTabBar() {
@@ -187,6 +190,7 @@ window.addEventListener('message', async (event) => {
   const message = event.data;
   switch (message.type) {
     case 'openFile': {
+      hasOpenedFile = true;
       basePath = message.basePath || '';
       const tab = tabManager.openTab(
         message.filePath,

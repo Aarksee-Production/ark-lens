@@ -6,6 +6,7 @@ export class ViewerProvider implements vscode.Disposable {
   private panel: vscode.WebviewPanel | undefined;
   private extensionUri: vscode.Uri;
   private disposables: vscode.Disposable[] = [];
+  private pendingFile: { filePath: string; fileName: string; fileType: 'md' | 'html'; content: string; fileDir: vscode.Uri } | undefined;
 
   constructor(extensionUri: vscode.Uri) {
     this.extensionUri = extensionUri;
@@ -22,11 +23,9 @@ export class ViewerProvider implements vscode.Disposable {
       this.panel.reveal(column);
       this.sendFileToWebview(filePath, fileName, fileType, content, fileDir);
     } else {
+      // Queue the file -- it will be sent when webview signals 'ready'
+      this.pendingFile = { filePath, fileName, fileType, content, fileDir };
       this.createPanel(column, fileDir);
-      // Small delay to ensure webview is ready
-      setTimeout(() => {
-        this.sendFileToWebview(filePath, fileName, fileType, content, fileDir);
-      }, 100);
     }
   }
 
@@ -201,6 +200,12 @@ export class ViewerProvider implements vscode.Disposable {
         break;
       case 'ready':
         this.sendSettings();
+        // Flush queued file now that webview is ready
+        if (this.pendingFile) {
+          const pf = this.pendingFile;
+          this.pendingFile = undefined;
+          this.sendFileToWebview(pf.filePath, pf.fileName, pf.fileType, pf.content, pf.fileDir);
+        }
         break;
     }
   }
