@@ -65,6 +65,9 @@ const markdownPurifyConfig: PurifyConfig = {
     'role', 'aria-label', 'aria-hidden',
   ],
   FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'button', 'select', 'textarea', 'link', 'meta', 'style', 'base', 'foreignObject', 'canvas'],
+  // Belt-and-suspenders: ALLOWED_ATTR above already blocks all unlisted attributes
+  // (including all 60+ on* event handlers). This explicit list is defense-in-depth to
+  // ensure these dangerous attrs are stripped even if ALLOWED_ATTR is accidentally widened.
   FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur', 'onsubmit', 'onchange', 'style'],
   ALLOW_DATA_ATTR: false,
 };

@@ -1,5 +1,10 @@
-// @ts-nocheck - webview context, vscode API acquired at runtime
-declare function acquireVsCodeApi(): any;
+interface VsCodeApi {
+  postMessage(message: unknown): void;
+  getState(): unknown;
+  setState(state: unknown): void;
+}
+
+declare function acquireVsCodeApi(): VsCodeApi;
 const vscode = acquireVsCodeApi();
 
 import { renderMarkdown, sanitizeHtml } from './renderer/markdown';
@@ -43,14 +48,36 @@ function extractBody(html: string): string {
   return bodyMatch ? bodyMatch[1] : html;
 }
 
+/** Resolve relative src/href attributes to webview-relative URIs via DOM traversal. */
 function resolveLocalPaths(html: string, base: string): string {
-  return html.replace(
-    /(src|href)="(?!https?:\/\/|data:|vscode-resource:|vscode-webview-resource:|\/|\.\.\/|\.\.\\)([^"#][^"]*?)"/g,
-    (_match, attr, relativePath) => {
-      const resolved = base.endsWith('/') ? base + relativePath : base + '/' + relativePath;
-      return `${attr}="${resolved}"`;
+  // Parse into an inert <template> -- no scripts execute, no images load.
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  const doc = template.content;
+
+  const SKIP_PATTERN = /^(https?:\/\/|data:|vscode-resource:|vscode-webview-resource:|\/|#)/;
+
+  doc.querySelectorAll('[src],[href]').forEach((el) => {
+    for (const attr of ['src', 'href'] as const) {
+      const value = el.getAttribute(attr);
+      if (!value || SKIP_PATTERN.test(value)) continue;
+
+      // Block path traversal including URL-encoded variants
+      try {
+        const decoded = decodeURIComponent(value);
+        if (/^\.\.[\\/]/.test(decoded) || /[/\\]\.\.([/\\]|$)/.test(decoded)) continue;
+      } catch {
+        continue; // Malformed URI encoding -- skip
+      }
+
+      const resolved = base.endsWith('/') ? base + value : base + '/' + value;
+      el.setAttribute(attr, resolved);
     }
-  );
+  });
+
+  const wrapper = document.createElement('div');
+  wrapper.appendChild(doc.cloneNode(true));
+  return wrapper.innerHTML;
 }
 
 async function displayTab(tab: Tab) {
@@ -186,8 +213,11 @@ document.getElementById('tab-bar')!.addEventListener('auxclick', (e) => {
 });
 
 // Messages from extension host
+const KNOWN_MESSAGE_TYPES = new Set(['openFile', 'updateFile', 'closeFile', 'initSettings', 'toggleTheme']);
+
 window.addEventListener('message', async (event) => {
   const message = event.data;
+  if (!message || typeof message.type !== 'string' || !KNOWN_MESSAGE_TYPES.has(message.type)) return;
   switch (message.type) {
     case 'openFile': {
       hasOpenedFile = true;

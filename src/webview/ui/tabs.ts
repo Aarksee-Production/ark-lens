@@ -40,7 +40,7 @@ export class TabManager {
     }
 
     const tab: Tab = {
-      id: hashString(filePath),
+      id: getTabId(filePath),
       filePath,
       fileName,
       fileType,
@@ -114,11 +114,15 @@ export class TabManager {
   }
 }
 
-function hashString(str: string): string {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash + char) | 0;
+/** Collision-free tab ID generator: deterministic per session (same path = same ID). */
+let tabIdCounter = 0;
+const pathToTabId = new Map<string, string>();
+
+function getTabId(filePath: string): string {
+  let id = pathToTabId.get(filePath);
+  if (!id) {
+    id = `tab-${tabIdCounter++}`;
+    pathToTabId.set(filePath, id);
   }
-  return 'tab-' + Math.abs(hash).toString(36);
+  return id;
 }

@@ -36,7 +36,11 @@ export class ViewerProvider implements vscode.Disposable {
       fileDir,
     ];
 
-    // Add workspace folders as local resource roots
+    // Security note (L-2): Adding workspace folders allows cross-directory image/media
+    // references (e.g., a Markdown file in folder A linking to an image in folder B).
+    // Removing this would break multi-root workspace usage. localResourceRoots only
+    // controls which files the webview can load as resources -- it does not expose file
+    // contents to JavaScript. The webview CSP (connect-src 'none') prevents exfiltration.
     if (vscode.workspace.workspaceFolders) {
       for (const folder of vscode.workspace.workspaceFolders) {
         localRoots.push(folder.uri);
